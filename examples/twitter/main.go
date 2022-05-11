@@ -39,11 +39,12 @@ func New(config *Config) *http.ServeMux {
 	oauth1Config := &oauth1.Config{
 		ConsumerKey:    config.TwitterConsumerKey,
 		ConsumerSecret: config.TwitterConsumerSecret,
-		CallbackURL:    "http://localhost:8080/twitter/callback",
+		CallbackURL:    "http://localhost:8090/twitter/callback",
 		Endpoint:       twitterOAuth1.AuthorizeEndpoint,
 	}
 	mux.Handle("/twitter/login", twitter.LoginHandler(oauth1Config, nil))
 	mux.Handle("/twitter/callback", twitter.CallbackHandler(oauth1Config, issueSession(), nil))
+	//mux.Handle("/twitter/requestToken", RequestTokenHandler(oauth1Config))
 	return mux
 }
 
@@ -78,6 +79,17 @@ func profileHandler(w http.ResponseWriter, req *http.Request) {
 	// authenticated profile
 	fmt.Fprintf(w, `<p>You are logged in %s!</p><form action="/logout" method="post"><input type="submit" value="Logout"></form>`, session.Values[sessionUsername])
 }
+func RequestTokenHandler(config *oauth1.Config) http.Handler{
+	requestToken, requestSecret, err := config.RequestToken()
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(requestToken,requestSecret)
+	return nil
+
+
+
+}
 
 // logoutHandler destroys the session on POSTs and redirects to home.
 func logoutHandler(w http.ResponseWriter, req *http.Request) {
@@ -89,7 +101,7 @@ func logoutHandler(w http.ResponseWriter, req *http.Request) {
 
 // main creates and starts a Server listening.
 func main() {
-	const address = "localhost:8080"
+	const address = "localhost:8090"
 	// read credentials from environment variables if available
 	config := &Config{
 		TwitterConsumerKey:    os.Getenv("TWITTER_CONSUMER_KEY"),
