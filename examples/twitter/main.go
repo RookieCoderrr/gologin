@@ -101,7 +101,7 @@ func logoutHandler(w http.ResponseWriter, req *http.Request) {
 
 // main creates and starts a Server listening.
 func main() {
-	const address = "localhost:8090"
+	const address = "0.0.0.0:8090"
 	// read credentials from environment variables if available
 	config := &Config{
 		TwitterConsumerKey:    os.Getenv("TWITTER_CONSUMER_KEY"),
