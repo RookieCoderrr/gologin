@@ -32,6 +32,7 @@ type Config struct {
 
 // New returns a new ServeMux with app routes.
 func New(config *Config) *http.ServeMux {
+
 	mux := http.NewServeMux()
 	mux.HandleFunc("/", profileHandler)
 	mux.HandleFunc("/logout", logoutHandler)
@@ -39,7 +40,7 @@ func New(config *Config) *http.ServeMux {
 	oauth1Config := &oauth1.Config{
 		ConsumerKey:    config.TwitterConsumerKey,
 		ConsumerSecret: config.TwitterConsumerSecret,
-		CallbackURL:    "http://localhost:8090/twitter/callback",
+		CallbackURL:    "http://52.230.106.141:8090/twitter/callback",
 		Endpoint:       twitterOAuth1.AuthorizeEndpoint,
 	}
 	mux.Handle("/twitter/login", twitter.LoginHandler(oauth1Config, nil))
@@ -129,4 +130,8 @@ func main() {
 	if err != nil {
 		log.Fatal("ListenAndServe: ", err)
 	}
+	fmt.Println("this")
+	fmt.Println("test2")
+	fmt.Println("test3")
 }
+
